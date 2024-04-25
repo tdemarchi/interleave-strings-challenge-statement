@@ -2,6 +2,9 @@
 
 Given `A`, `B` and `C` strings, find whether `C` is formed by the interleaving of `A` and `B`.
 
+In other words, check whether `C` is totally formed by consuming the chars **in sequence** from `A` and `B`  (it doesn't matter if from `A` or `B` first).
+It is not necessary to consume all chars from `A` and `B`.
+
 ## Java
 ```java
 boolean isInterleave(String A, String B, String C)
@@ -23,22 +26,89 @@ def isInterleave(A, B, C):
 
 ### 1
 Input:
-- `A` = `"aabcc"`
-- `B` = `"dbbca"`
-- `C` = `"aadbbcbcac"`
+- `A` = `"zzyxxy"`
+- `B` = `"wyyxz"`
+- `C` = `"zzwyyxyxzx"`
 
 Output: `true`
     
 Explanation:
-`"aa"` (from `A`) + `"dbbc"` (from `B`) + `"bc"` (from `A`) + `"a"` (from `B`) + `"c"` (from `A`)
+
+`C` = `"zz"` from `A` + `"wyyx"` from `B` + `"yx"` from `A` + `"z"` from `B` + `"x"` from `A`
+
+```
+C = zz wyyx yx z x
+    └┘ └──┘ └┘ ╵ ╵
+    1   2   3  4 5
+
+A = zz yx x y
+    └┘ └┘ ╵
+    1  3  5
+
+B = wyyx z
+    └──┘ ╵
+     2   4
+```
+
+Note that `A` still have `"y"` left, which is not a problem.
 
 ### 2
-Input :
-- `A` = `"aabcc"`
-- `B` = `"dbbca"`
-- `C` = `"aadbbbaccc"`
+Input:
+- `A` = `"zzyxxy"`
+- `B` = `"wyyxz"`
+- `C` = `"wyyzzwyx"`
 
 Output: `false`
 
 Explanation:
-`"aa"` (from `A`) + `"dbb"` (from `B`) + `"b"` (from `A`) + `"a"` (there is no `"a"` as next char in `A` or `B`)
+
+`C` != `"wyy"` from `B` + `"zz"` from `A` + `"w"` from ? (there is no `"w"` as next char in `A` or `B`)
+
+```
+C = wyy zz w yx
+    └─┘ └┘ ╵
+     1  2  3
+
+
+A = zz yxxy
+    └┘
+    2
+
+B = wyy x z
+    └─┘
+     1
+```
+
+### 3
+Input:
+- `A` = `"zzyxxy"`
+- `B` = `"wyyxz"`
+- `C` = `"wzzyxxy"`
+
+Output: `true`
+
+Explanation:
+
+`C` = `"w"` from `B` + `"zzyxxy"` from `A`
+
+```
+C = w zzyxxy
+    ╵ └────┘
+    1   2
+
+A = zzyxxy
+    └────┘
+      2   
+
+B = w y yxz
+    ╵
+    1
+```
+
+### 4 (try it)
+Input:
+- `A` = `"zzyxxy"`
+- `B` = `"wyyxz"`
+- `C` = `"wyyzzyxxz"`
+
+Output: ?
